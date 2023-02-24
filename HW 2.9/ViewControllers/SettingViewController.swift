@@ -26,6 +26,7 @@ final class SettingViewController: UIViewController {
         super.viewDidLoad()
         
         colorView.layer.cornerRadius = 10
+        
         setSliders()
         setValue(for: redLabel, greenLabel, blueLabel)
         colorView.backgroundColor = color
