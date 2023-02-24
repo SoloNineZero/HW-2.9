@@ -19,6 +19,10 @@ final class SettingViewController: UIViewController {
     @IBOutlet var greenSlider: UISlider!
     @IBOutlet var blueSlider: UISlider!
     
+    @IBOutlet var redTF: UITextField!
+    @IBOutlet var greenTF: UITextField!
+    @IBOutlet var blueTF: UITextField!
+    
     var color: UIColor!
     var delegate: SettingViewProtocol!
     
@@ -29,6 +33,7 @@ final class SettingViewController: UIViewController {
         
         setSliders()
         setValue(for: redLabel, greenLabel, blueLabel)
+        setValue(for: redTF, greenTF, blueTF)
         colorView.backgroundColor = color
     }
 
@@ -37,10 +42,13 @@ final class SettingViewController: UIViewController {
         switch sender {
         case redSlider:
             redLabel.text = string(from: redSlider)
+            redTF.text = string(from: redSlider)
         case greenSlider:
             greenLabel.text = string(from: greenSlider)
+            greenTF.text = string(from: greenSlider)
         default:
             blueLabel.text = string(from: blueSlider)
+            blueTF.text = string(from: blueSlider)
         }
     }
     
@@ -67,6 +75,19 @@ final class SettingViewController: UIViewController {
                 greenLabel.text = string(from: greenSlider)
             default:
                 blueLabel.text = string(from: blueSlider)
+            }
+        }
+    }
+    
+    private func setValue(for textFields: UITextField...) {
+        textFields.forEach { textField in
+            switch textField {
+            case redTF:
+                redTF.text = string(from: redSlider)
+            case greenTF:
+                greenTF.text = string(from: greenSlider)
+            default:
+                blueTF.text = string(from: blueSlider)
             }
         }
     }
