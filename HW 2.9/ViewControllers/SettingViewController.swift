@@ -24,7 +24,7 @@ final class SettingViewController: UIViewController {
     @IBOutlet var blueTF: UITextField!
     
     var color: UIColor!
-    var delegate: SettingViewProtocol!
+    unowned var delegate: SettingViewProtocol!
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SettingViewProtocol {
+protocol SettingViewProtocol: AnyObject {
     func set(color: UIColor)
 }
 
