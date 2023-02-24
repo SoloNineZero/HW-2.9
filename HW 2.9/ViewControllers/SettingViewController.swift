@@ -8,7 +8,7 @@
 import UIKit
 
 final class SettingViewController: UIViewController {
-
+    
     @IBOutlet var colorView: UIView!
     
     @IBOutlet var redLabel: UILabel!
@@ -28,15 +28,23 @@ final class SettingViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        redTF.delegate = self
+        greenTF.delegate = self
+        blueTF.delegate = self
         
         colorView.layer.cornerRadius = 10
+        colorView.backgroundColor = color
         
         setSliders()
         setValue(for: redLabel, greenLabel, blueLabel)
         setValue(for: redTF, greenTF, blueTF)
-        colorView.backgroundColor = color
     }
-
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        view.endEditing(true)
+    }
+    
     @IBAction func sliderAction(_ sender: UISlider) {
         setColor()
         switch sender {
@@ -51,6 +59,8 @@ final class SettingViewController: UIViewController {
             blueTF.text = string(from: blueSlider)
         }
     }
+    
+    
     
     @IBAction func dobeButtonAction(_ sender: UIButton) {
         delegate.set(color: colorView.backgroundColor ?? .white)
@@ -104,5 +114,62 @@ final class SettingViewController: UIViewController {
         String(format: "%.2f", slider.value)
     }
     
+    private func addDoneButton(to textFields: UITextField...) {
+        
+        textFields.forEach { textField in
+            let keyboardToolbar = UIToolbar()
+            textField.inputAccessoryView = keyboardToolbar
+            keyboardToolbar.sizeToFit()
+            
+            let doneButton = UIBarButtonItem(
+                title:"Done",
+                style: .done,
+                target: self,
+                action: #selector(didTapDone)
+            )
+            
+            let flexBarButton = UIBarButtonItem(
+                barButtonSystemItem: .flexibleSpace,
+                target: nil,
+                action: nil
+            )
+            
+            keyboardToolbar.items = [flexBarButton, doneButton]
+        }
+    }
+    
+    @objc private func didTapDone() {
+        view.endEditing(true)
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+}
+
+extension SettingViewController: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard let value = textField.text else { return }
+        if let currentValue = Float(value), currentValue <= 1 {
+            switch textField {
+            case redTF:
+                redSlider.setValue(currentValue, animated: true)
+                setValue(for: redLabel)
+            case greenTF:
+                greenSlider.setValue(currentValue, animated: true)
+                setValue(for: greenLabel)
+            default:
+                blueSlider.setValue(currentValue, animated: true)
+                setValue(for: blueLabel)
+            }
+            
+            setColor()
+            return
+        }
+        showAlert(title: "Error!", message: "Enter values from 0.00 to 1.00")
+    }
 }
 
