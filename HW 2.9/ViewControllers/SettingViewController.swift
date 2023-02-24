@@ -38,6 +38,7 @@ final class SettingViewController: UIViewController {
         setSliders()
         setValue(for: redLabel, greenLabel, blueLabel)
         setValue(for: redTF, greenTF, blueTF)
+        addDoneButton(to: redTF, greenTF, blueTF)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -115,7 +116,6 @@ final class SettingViewController: UIViewController {
     }
     
     private func addDoneButton(to textFields: UITextField...) {
-        
         textFields.forEach { textField in
             let keyboardToolbar = UIToolbar()
             textField.inputAccessoryView = keyboardToolbar
